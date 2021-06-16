@@ -4,7 +4,7 @@
 #include <array>
 
 int main (){
-	int64_t p = 941; 
+	int p = 941; 
 	Public_Paramater pubpara = SetUp(p); 
 	Secret_Key sk = SecKeyGen(pubpara); 
 	Public_Key pk = PubKeyGen(pubpara, sk); 
