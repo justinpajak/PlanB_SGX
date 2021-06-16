@@ -50,6 +50,10 @@ void printf(const char *fmt, ...)
     ocall_print_string(buf);
 }
 
+void bgv_enc(char *buffer, size_t len) {
+    printf("running enc alg\n");
+}
+
 void printf_helloworld()
 {
     printf("Hello World\n");

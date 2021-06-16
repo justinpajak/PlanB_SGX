@@ -41,6 +41,7 @@ enclave {
     
     trusted {
         public void printf_helloworld();
+        public void bgv_enc([in, size=len] char *buffer, size_t len);
     };
 
     /* 

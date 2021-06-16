@@ -227,13 +227,17 @@ void ocall_print_string(const char *str)
     printf("%s", str);
 }
 
+void usage(int status) {
+    fprintf(stderr, "Usage: %s options...\n", "./app");
+    fprintf(stderr, "   -e Encrypt\n");
+    fprintf(stderr, "   -d Decrypt\n");
+    exit(status);
+}
+
 
 /* Application entry */
 int SGX_CDECL main(int argc, char *argv[])
 {
-    (void)(argc);
-    (void)(argv);
-
 
     /* Initialize the enclave */
     if(initialize_enclave() < 0){
@@ -241,8 +245,46 @@ int SGX_CDECL main(int argc, char *argv[])
         getchar();
         return -1; 
     }
- 
-    printf_helloworld(global_eid);
+    
+    /* Parse command line arguments */
+    if (argc > 2 || argc < 2 || strlen(argv[1]) > 2 || argv[1][0] != '-') {
+        usage(1);
+    }
+    int choice = -1;
+    switch(argv[1][1]) {
+        case 'h':
+            usage(0);
+            break;
+
+        case 'e':
+            // Run encryption algorithm
+            choice = 1;
+            break;
+
+        case 'd':
+            // Run decryption algorithm
+            choice = 0;
+            break;
+
+        default:
+            usage(1);
+    }
+
+    // Run BGV encryption
+    if (choice) {
+        printf("encrypting\n");
+        FILE *data = fopen("plaintext.txt", "r");
+        if (!data) {
+            fprintf(stderr, "Error opening plaintext.txt\n");
+            return EXIT_FAILURE;
+        }
+
+        // Write data to buffer 
+        char buffer[BUFSIZ];
+        while (fread(buffer, 1, BUFSIZ, data) > 0);
+        bgv_enc(global_eid, buffer, BUFSIZ);
+        fclose(data);
+    }
 
     /* Destroy the enclave */
     sgx_destroy_enclave(global_eid);
