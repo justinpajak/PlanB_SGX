@@ -58,8 +58,8 @@ void printf(const char *fmt, ...)
 void bgv_enc(char *buffer, size_t len) {
 
     /* Construct plaintext object */
-    char *line = strtok(buffer, "\n");
     Plaintext pt;
+    char *line = strtok(buffer, "\n");
     int i = 0;
     while (line) {
         pt.m[i] = atoi(line);
@@ -83,16 +83,22 @@ void bgv_enc(char *buffer, size_t len) {
         str += std::to_string(ct.c0[i]);
         str += "\n";
     }
+    str += "!";
+    str += "\n";
     for (int i = 0; i < length_vector; i++) {
         str += std::to_string(ct.c1[i]);
         str += "\n";
     }
+    str += "!";
+    str += "\n";
     for (int i = 0; i < length_vector; i++) {
         for (int j = 0; j < ct.ctvec0[i].size(); j++) {
             str += std::to_string(ct.ctvec0[i][j]);
             str += "\n";
         }
     }
+    str += "!";
+    str += "\n";
     for (int i = 0; i < length_vector; i++) {
         for (int j = 0; j < ct.ctvec1[i].size(); j++) {
             str += std::to_string(ct.ctvec1[i][j]);
@@ -108,6 +114,8 @@ void bgv_enc(char *buffer, size_t len) {
         sk_str += std::to_string(sk.s[i]);
         sk_str += "\n";
     }
+    sk_str += "!";
+    sk_str += "\n";
     for (int i = 0; i < length_vector; i++) {
         for (int j = 0; j < sk.skvec[i].size(); j++) {
             sk_str += std::to_string(sk.skvec[i][j]);
@@ -122,8 +130,57 @@ void bgv_enc(char *buffer, size_t len) {
 }
 
 void bgv_dec(char *buffer, size_t len) {
+ 
     /* Constuct ciphertext object */
+    Ciphertext ct;
+    char *line = strtok(buffer, "\n");
+    int i = 0;
+    int j = 0;
+    int ex = 0;
+    while (line) {
+        if (*line == '!') {
+            ex++;
+            i = 0;
+            j = 0;
+            line = strtok(NULL, "\n");
+            continue;
+        }
+        if (ex == 0) {
+            ct.c0[i] = atoi(line);
+            line = strtok(NULL, "\n");
+            i++;
+        }
+        if (ex == 1) {
+            ct.c1[i] = atoi(line);
+            line = strtok(NULL, "\n");
+            i++;
+        }
+        if (ex == 2) {
+            ct.ctvec0[j].push_back(atoi(line));
+            line = strtok(NULL, "\n");
+            i++;
+            if (i == 4) {
+                j++;
+                i = 0;
+            }
+        }
+        if (ex == 3) {
+            ct.ctvec1[j].push_back(atoi(line));
+            line = strtok(NULL, "\n");
+            i++;
+            if (i == 4) {
+                j++;
+                i = 0;
+            }
+        }
+    }
+    for (int i = 0; i < length_vector; i++) {
+        for (int j = 0; j < ct.ctvec1[i].size(); j++) {
+            printf("%d\n", ct.ctvec1[i][j]);
+        }
+    }
 
+    
 
     /* Decrypt ciphertext */
     /*int p = 941;
@@ -132,11 +189,15 @@ void bgv_dec(char *buffer, size_t len) {
     Plaintext pt = Decrypt(pub, sk, ct);
 
     /* Convert pt to a buffer */
+    /*char pt_buf[BUFSIZ];
+    memset(ct_buf, '\0', BUFSIZ);
+    std::string str;
+    for (int i = 0; i < length_vector; i++) {
+        str += std::to_string(pt.m[i]);
+        str += "\n";
+    }
 
-
-
-
-    return_plaintext(buffer, len);
+    return_plaintext(pt_buf, len);*/
 }
 
 

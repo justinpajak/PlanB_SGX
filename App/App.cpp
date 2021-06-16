@@ -284,7 +284,7 @@ int SGX_CDECL main(int argc, char *argv[])
     if(initialize_enclave() < 0){
         printf("Enter a character before exit ...\n");
         getchar();
-        return -1; 
+        return -1;
     }
     
     /* Parse command line arguments */
@@ -313,31 +313,34 @@ int SGX_CDECL main(int argc, char *argv[])
 
     // Run BGV encryption
     if (choice) {
-        FILE *data = fopen("plaintext.txt", "r");
-        if (!data) {
+
+        /* Read in plaintext from plaintext.txt */
+        FILE *f_plaintext = fopen("plaintext.txt", "r");
+        if (!f_plaintext) {
             fprintf(stderr, "Error opening plaintext.txt\n");
             return EXIT_FAILURE;
         }
-
-        // Write data to buffer 
         char buffer[BUFSIZ];
-        while (fread(buffer, 1, BUFSIZ, data) > 0);
+        while (fread(buffer, 1, BUFSIZ, f_plaintext) > 0);
+
+        /* Make Encryption ECALL */
         bgv_enc(global_eid, buffer, BUFSIZ);
-        fclose(data);
+        fclose(f_plaintext);
     } 
 
     // Run BGV decryption
     else {
-        FILE *data = fopen("ciphertext.txt", "r");
-        if (!data) {
+
+        /* Read in ciphertext from ciphertext.txt */
+        FILE *f_ciphertext = fopen("ciphertext.txt", "r");
+        if (!f_ciphertext) {
             fprintf(stderr, "Error opening ciphertext.txt\n");
             return EXIT_FAILURE;
         }
-        // Write data to buffer
         char buffer[BUFSIZ];
-        while (fread(buffer, 1, BUFSIZ, data) > 0);
+        while (fread(buffer, 1, BUFSIZ, f_ciphertext) > 0);
         bgv_dec(global_eid, buffer, BUFSIZ);
-        fclose(data);
+        fclose(f_ciphertext);
     }
 
     /* Destroy the enclave */
