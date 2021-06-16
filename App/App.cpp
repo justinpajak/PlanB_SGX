@@ -33,6 +33,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <iostream>
+#include <fstream>
 
 # include <unistd.h>
 # include <pwd.h>
@@ -225,6 +227,11 @@ void ocall_print_string(const char *str)
      * the input string to prevent buffer overflow. 
      */
     printf("%s", str);
+}
+
+void return_ciphertext(char *buffer, size_t len) {
+    /* Write ciphertext to file */
+    FILE *
 }
 
 void usage(int status) {

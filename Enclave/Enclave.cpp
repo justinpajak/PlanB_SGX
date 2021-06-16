@@ -37,6 +37,8 @@
 #include "Enclave.h"
 #include "Enclave_t.h"  /* print_string */
 #include <sgx_trts.h>
+#include <iostream>
+#include <fstream>
 
 /* 
  * printf: 
@@ -73,7 +75,15 @@ void bgv_enc(char *buffer, size_t len) {
     Public_Key pk = PubKeyGen(pub, sk);
     Ciphertext ct = Encrypt(pub, pk, pt, depth);
 
-    
+    Ciphertext *ct_pointer = &ct;
+    buffer = static_cast<char*>(static_cast<void*>(ct_pointer));
+    return_ciphertext(buffer, len);
+
+    /*Plaintext *pt_pointer = &pt;
+    buffer = static_cast<char*>(static_cast<void*>(pt_pointer));
+    printf("%s\n\n", buffer);
+    Plaintext *ret = static_cast<Plaintext *>(static_cast<void*>(buffer));*/
+
 }
 
 
