@@ -56,6 +56,7 @@ void printf(const char *fmt, ...)
 }
 
 void bgv_enc(char *buffer, size_t len) {
+
     /* Construct plaintext object */
     char *line = strtok(buffer, "\n");
     Plaintext pt;
@@ -73,7 +74,6 @@ void bgv_enc(char *buffer, size_t len) {
     Secret_Key sk = SecKeyGen(pub);
     Public_Key pk = PubKeyGen(pub, sk);
     Ciphertext ct = Encrypt(pub, pk, pt, depth);
-
 
     /* Convert ct into a buffer */
     char ct_buf[BUFSIZ];
@@ -100,9 +100,25 @@ void bgv_enc(char *buffer, size_t len) {
         }
     }
 
+    /* Convert sk into a buffer */
+    char sk_buf[BUFSIZ];
+    memset(sk_buf, '\0', BUFSIZ);
+    std::string sk_str;
+    for (int i = 0; i < length_vector; i++) {
+        sk_str += std::to_string(sk.s[i]);
+        sk_str += "\n";
+    }
+    for (int i = 0; i < length_vector; i++) {
+        for (int j = 0; j < sk.skvec[i].size(); j++) {
+            sk_str += std::to_string(sk.skvec[i][j]);
+            sk_str += "\n";
+        }
+    }
+
     /* Return buffer containing ciphertext and secret key*/
     strlcpy(ct_buf, str.c_str(), BUFSIZ);
-    //return_ciphertext(ct_buf, len);
+    strlcpy(sk_buf, sk_str.c_str(), BUFSIZ);
+    return_ciphertext(ct_buf, BUFSIZ, sk_buf, BUFSIZ);
 }
 
 void bgv_dec(char *buffer, size_t len) {
