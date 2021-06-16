@@ -35,6 +35,7 @@
 #include <assert.h>
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 # include <unistd.h>
 # include <pwd.h>
@@ -229,9 +230,32 @@ void ocall_print_string(const char *str)
     printf("%s", str);
 }
 
+typedef struct
+{
+    int64_t c0[4]; 
+    int64_t c1[4]; 
+    std::vector<int64_t> ctvec0[4]; 
+    std::vector<int64_t> ctvec1[4]; 
+    int64_t depth; 
+} Ciphertext;
+
 void return_ciphertext(char *buffer, size_t len) {
     /* Write ciphertext to file */
-    FILE *
+    FILE *data = fopen("ciphertext.txt", "w+");
+    if (!data) {
+        fprintf(stderr, "Error opening ciphertext.txt\n");
+        return;
+    }
+}
+
+void return_plaintext(char *buffer, size_t len) {
+    /* Write plaintext to file */
+    FILE *data = fopen("decrypted.txt", "w+");
+    if (!data) {
+        fprintf(stderr, "Error opening decrypted.txt\n");
+        return;
+    }
+
 }
 
 void usage(int status) {
@@ -279,7 +303,6 @@ int SGX_CDECL main(int argc, char *argv[])
 
     // Run BGV encryption
     if (choice) {
-        printf("encrypting\n");
         FILE *data = fopen("plaintext.txt", "r");
         if (!data) {
             fprintf(stderr, "Error opening plaintext.txt\n");
@@ -290,6 +313,20 @@ int SGX_CDECL main(int argc, char *argv[])
         char buffer[BUFSIZ];
         while (fread(buffer, 1, BUFSIZ, data) > 0);
         bgv_enc(global_eid, buffer, BUFSIZ);
+        fclose(data);
+    } 
+
+    // Run BGV decryption
+    else {
+        FILE *data = fopen("ciphertext.txt", "r");
+        if (!data) {
+            fprintf(stderr, "Error opening ciphertext.txt\n");
+            return EXIT_FAILURE;
+        }
+        // Write data to buffer
+        char buffer[BUFSIZ];
+        while (fread(buffer, 1, BUFSIZ, data) > 0);
+        bgv_dec(global_eid, buffer, BUFSIZ);
         fclose(data);
     }
 

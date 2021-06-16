@@ -55,10 +55,8 @@ void printf(const char *fmt, ...)
 }
 
 void bgv_enc(char *buffer, size_t len) {
-    printf("running enc alg\n");
-
     /* Construct plaintext object */
-    char *line = strtok(buffer, "\n");
+    /*char *line = strtok(buffer, "\n");
     Plaintext pt;
     int i = 0;
     while (line) {
@@ -67,23 +65,40 @@ void bgv_enc(char *buffer, size_t len) {
         i++;
     }
 
-    /* Run encryption algorithm */
-    int p = 941;
+    /* Encrypt plaintext */
+    /*int p = 941;
     int depth = 1;
     Public_Paramater pub = SetUp(p);
     Secret_Key sk = SecKeyGen(pub);
     Public_Key pk = PubKeyGen(pub, sk);
     Ciphertext ct = Encrypt(pub, pk, pt, depth);
 
-    Ciphertext *ct_pointer = &ct;
-    buffer = static_cast<char*>(static_cast<void*>(ct_pointer));
+    /****************************/
+    /* Convert ct into a buffer */
+    
+
+
+
+    /****************************/
     return_ciphertext(buffer, len);
+}
 
-    /*Plaintext *pt_pointer = &pt;
-    buffer = static_cast<char*>(static_cast<void*>(pt_pointer));
-    printf("%s\n\n", buffer);
-    Plaintext *ret = static_cast<Plaintext *>(static_cast<void*>(buffer));*/
+void bgv_dec(char *buffer, size_t len) {
+    /* Constuct ciphertext object */
 
+
+    /* Decrypt ciphertext */
+    /*int p = 941;
+    int depth = 1;
+    Public_Paramater pub = SetUp(p);
+    Plaintext pt = Decrypt(pub, sk, ct);
+
+    /* Convert pt to a buffer */
+
+
+
+
+    return_plaintext(buffer, len);
 }
 
 

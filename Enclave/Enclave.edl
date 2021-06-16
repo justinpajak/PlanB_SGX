@@ -41,6 +41,7 @@ enclave {
     
     trusted {
         public void bgv_enc([in, size=len] char *buffer, size_t len);
+        public void bgv_dec([in, size=len] char *buffer, size_t len);
     };
 
     /* 
@@ -51,6 +52,7 @@ enclave {
     untrusted {
         void ocall_print_string([in, string] const char *str);
         void return_ciphertext([in, string=len] char *buffer, size_t len);
+        void return_plaintext([in, string=len] char *buffer, size_t len);
     };
 
 };
