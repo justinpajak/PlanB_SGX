@@ -337,10 +337,22 @@ int SGX_CDECL main(int argc, char *argv[])
             fprintf(stderr, "Error opening ciphertext.txt\n");
             return EXIT_FAILURE;
         }
-        char buffer[BUFSIZ];
-        while (fread(buffer, 1, BUFSIZ, f_ciphertext) > 0);
-        bgv_dec(global_eid, buffer, BUFSIZ);
+        char ct_buffer[BUFSIZ];
+        while (fread(ct_buffer, 1, BUFSIZ, f_ciphertext) > 0);
         fclose(f_ciphertext);
+
+        /* Read in secret key from secretkey.txt */
+        FILE *f_secretkey = fopen("secretkey.txt", "r");
+        if (!f_secretkey) {
+            fprintf(stderr, "Error opening secretkey.txt\n");
+            return EXIT_FAILURE;
+        }
+        char sk_buffer[BUFSIZ];
+        while (fread(sk_buffer, 1, BUFSIZ, f_secretkey) > 0);
+        fclose(f_secretkey);
+
+        /* Make Decryption ECALL */
+        bgv_dec(global_eid, ct_buffer, BUFSIZ, sk_buffer, BUFSIZ);
     }
 
     /* Destroy the enclave */

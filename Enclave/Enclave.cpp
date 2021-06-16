@@ -37,9 +37,6 @@
 #include "Enclave.h"
 #include "Enclave_t.h"  /* print_string */
 #include <sgx_trts.h>
-#include <iostream>
-#include <fstream>
-
 
 /* 
  * printf: 
@@ -129,11 +126,11 @@ void bgv_enc(char *buffer, size_t len) {
     return_ciphertext(ct_buf, BUFSIZ, sk_buf, BUFSIZ);
 }
 
-void bgv_dec(char *buffer, size_t len) {
+void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
  
     /* Constuct ciphertext object */
     Ciphertext ct;
-    char *line = strtok(buffer, "\n");
+    char *line = strtok(ciphertext, "\n");
     int i = 0;
     int j = 0;
     int ex = 0;
@@ -174,16 +171,45 @@ void bgv_dec(char *buffer, size_t len) {
             }
         }
     }
-    for (int i = 0; i < length_vector; i++) {
-        for (int j = 0; j < ct.ctvec1[i].size(); j++) {
-            printf("%d\n", ct.ctvec1[i][j]);
+
+    /* Construct Secret Key object */
+    Secret_Key sk;
+    line = strtok(secretkey, "\n");
+    i = 0;
+    j = 0;
+    ex = 0;
+    char *end;
+    while (line) {
+        if (*line == '!') {
+            ex++;
+            i = 0;
+            line = strtok(NULL, "\n");
+            continue;
+        }
+        if (ex == 0) {
+            sk.s[i] = (uint64_t)strtoul(line, &end, 10);
+            line = strtok(NULL, "\n");
+            i++;
+        }
+        if (ex == 1) {
+            sk.skvec[j].push_back((uint64_t)strtoul(line, &end, 10));
+            line = strtok(NULL, "\n");
+            i++;
+            if (i == 4) {
+                j++;
+                i = 0;
+            }
         }
     }
 
-    
+    for (int i = 0; i < length_vector; i++) {
+        for (int j = 0; j < sk.skvec[i].size(); j++) {
+            printf("%lu\n", sk.skvec[i][j]);
+        }
+    }
 
     /* Decrypt ciphertext */
-    /*int p = 941;
+    int p = 941;
     int depth = 1;
     Public_Paramater pub = SetUp(p);
     Plaintext pt = Decrypt(pub, sk, ct);
