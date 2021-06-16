@@ -258,14 +258,14 @@ void return_ciphertext(char *ciphertext, size_t len, char *secretkey, size_t len
     fputs(secretkey, f_secretkey);
 }
 
-void return_plaintext(char *buffer, size_t len) {
+void return_plaintext(char *plaintext, size_t len) {
     /* Write plaintext to file */
-    FILE *data = fopen("decrypted.txt", "w+");
-    if (!data) {
+    FILE *f_decrypted = fopen("decrypted.txt", "w+");
+    if (!f_decrypted) {
         fprintf(stderr, "Error opening decrypted.txt\n");
         return;
     }
-
+    fputs(plaintext, f_decrypted);
 }
 
 void usage(int status) {

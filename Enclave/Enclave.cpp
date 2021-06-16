@@ -215,15 +215,17 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
     Plaintext pt = Decrypt(pub, sk, ct);
 
     /* Convert pt to a buffer */
-    /*char pt_buf[BUFSIZ];
-    memset(ct_buf, '\0', BUFSIZ);
+    char pt_buf[BUFSIZ];
+    memset(pt_buf, '\0', BUFSIZ);
     std::string str;
     for (int i = 0; i < length_vector; i++) {
         str += std::to_string(pt.m[i]);
         str += "\n";
     }
 
-    return_plaintext(pt_buf, len);*/
+    /* Return buffer containing plaintext */
+    strlcpy(pt_buf, str.c_str(), BUFSIZ);
+    return_plaintext(pt_buf, len);
 }
 
 
