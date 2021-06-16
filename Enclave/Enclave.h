@@ -36,6 +36,8 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 #define length_vector 4 //defining the length of vector to be 4
 #define L 3 //defining depth of the circui to be 3

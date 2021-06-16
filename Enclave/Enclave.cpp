@@ -37,8 +37,7 @@
 #include "Enclave.h"
 #include "Enclave_t.h"  /* print_string */
 #include <sgx_trts.h>
-#include <iostream>
-#include <fstream>
+
 
 /* 
  * printf: 
@@ -76,7 +75,7 @@ void bgv_enc(char *buffer, size_t len) {
     /****************************/
     /* Convert ct into a buffer */
     
-
+    std::ofstream outfile;
 
 
     /****************************/
