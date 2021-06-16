@@ -41,7 +41,7 @@ typedef struct
 typedef struct 
 {
 	int64_t m[length_vector]; 
-	std::vector<int64_t> mvec[length_vector]; 
+	std::vector<int64_t> mvec[length_vector];
 }Plaintext;
 
 int64_t mod(int64_t a, int64_t n);

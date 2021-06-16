@@ -1,7 +1,8 @@
 #include "BGV.h"
-#include <iostream>
 #include <cstdint>
 #include <array>
+#include <iostream>
+#include <stdlib.h>
 
 int main (){
 	int p = 941; 
@@ -20,23 +21,7 @@ int main (){
 	int64_t check0  = invChineseRemainder(aftercrypt.mvec[0],pubpara); 
 	message.mvec[0] =  chineseRemainder(message.m[0], pubpara); 
 	int64_t message0  = invChineseRemainder(message.mvec[0],pubpara); 
-	/*if(aftercrypt.m[0] == message.m[0])
-	{
-		std::cout<<"YES for array"<<std::endl; 
-	}
-	else
-	{
-		std::cout<<"NO for array "<<aftercrypt.m[0]<<" "<<message.m[0]<<std::endl; 
-	}
-	if(check0 == message.m[0])
-	{
-		std::cout<<"YES for vector"<<std::endl; 
-	}
-	else
-	{
-		std::cout<<"NO for vector"<<check0<<" "<<message0<<std::endl; 
-		std::cout<<"vector"<<message.mvec[0].at(1)<<" "<<aftercrypt.mvec[0].at(1)<<std::endl; 
-	}*/
+
 	for (int i = 0; i < length_vector; i++) {
 		std::cout << message.m[i] << std::endl;
 	}

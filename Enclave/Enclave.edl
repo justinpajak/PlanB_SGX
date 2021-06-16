@@ -51,7 +51,7 @@ enclave {
      */
     untrusted {
         void ocall_print_string([in, string] const char *str);
-        void return_ciphertext([in, string=len] char *buffer, size_t len);
+        void return_ciphertext([in, string=len] char *ciphertext, size_t len, [in, string=len1] char *secretkey, size_t len1);
         void return_plaintext([in, string=len] char *buffer, size_t len);
     };
 

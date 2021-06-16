@@ -239,13 +239,14 @@ typedef struct
     int64_t depth; 
 } Ciphertext;
 
-void return_ciphertext(char *buffer, size_t len) {
+void return_ciphertext(char *ciphertext, size_t len, char *secretkey, size_t len1) {
     /* Write ciphertext to file */
     FILE *data = fopen("ciphertext.txt", "w+");
     if (!data) {
         fprintf(stderr, "Error opening ciphertext.txt\n");
         return;
     }
+    fputs(ciphertext, data);
 }
 
 void return_plaintext(char *buffer, size_t len) {

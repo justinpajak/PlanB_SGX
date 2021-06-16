@@ -37,6 +37,8 @@
 #include "Enclave.h"
 #include "Enclave_t.h"  /* print_string */
 #include <sgx_trts.h>
+#include <iostream>
+#include <fstream>
 
 
 /* 
@@ -55,7 +57,7 @@ void printf(const char *fmt, ...)
 
 void bgv_enc(char *buffer, size_t len) {
     /* Construct plaintext object */
-    /*char *line = strtok(buffer, "\n");
+    char *line = strtok(buffer, "\n");
     Plaintext pt;
     int i = 0;
     while (line) {
@@ -65,21 +67,42 @@ void bgv_enc(char *buffer, size_t len) {
     }
 
     /* Encrypt plaintext */
-    /*int p = 941;
+    int p = 941;
     int depth = 1;
     Public_Paramater pub = SetUp(p);
     Secret_Key sk = SecKeyGen(pub);
     Public_Key pk = PubKeyGen(pub, sk);
     Ciphertext ct = Encrypt(pub, pk, pt, depth);
 
-    /****************************/
+
     /* Convert ct into a buffer */
-    
-    std::ofstream outfile;
+    char ct_buf[BUFSIZ];
+    memset(ct_buf, '\0', BUFSIZ);
+    std::string str;
+    for (int i = 0; i < length_vector; i++) {
+        str += std::to_string(ct.c0[i]);
+        str += "\n";
+    }
+    for (int i = 0; i < length_vector; i++) {
+        str += std::to_string(ct.c1[i]);
+        str += "\n";
+    }
+    for (int i = 0; i < length_vector; i++) {
+        for (int j = 0; j < ct.ctvec0[i].size(); j++) {
+            str += std::to_string(ct.ctvec0[i][j]);
+            str += "\n";
+        }
+    }
+    for (int i = 0; i < length_vector; i++) {
+        for (int j = 0; j < ct.ctvec1[i].size(); j++) {
+            str += std::to_string(ct.ctvec1[i][j]);
+            str += "\n";
+        }
+    }
 
-
-    /****************************/
-    return_ciphertext(buffer, len);
+    /* Return buffer containing ciphertext and secret key*/
+    strlcpy(ct_buf, str.c_str(), BUFSIZ);
+    //return_ciphertext(ct_buf, len);
 }
 
 void bgv_dec(char *buffer, size_t len) {
