@@ -3,6 +3,7 @@
 #include <array>
 #include <iostream>
 #include <stdlib.h>
+#include <stdio.h>
 
 int main (){
 	int p = 941; 
@@ -14,10 +15,10 @@ int main (){
 	message.m[1] = 97; 
 	message.m[2] = 974; 
 	message.m[3] = 738; 
-	int depth = 0; 
+	int depth = 1; 
 	Ciphertext ct = Encrypt(pubpara, pk, message, depth); 
 	Plaintext aftercrypt; 
-	aftercrypt = Decrypt(pubpara, sk, ct);  
+	aftercrypt = Decrypt(pubpara, sk, ct);
 	int64_t check0  = invChineseRemainder(aftercrypt.mvec[0],pubpara); 
 	message.mvec[0] =  chineseRemainder(message.m[0], pubpara); 
 	int64_t message0  = invChineseRemainder(message.mvec[0],pubpara); 

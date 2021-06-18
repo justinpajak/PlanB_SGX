@@ -52,9 +52,10 @@ void printf(const char *fmt, ...)
     ocall_print_string(buf);
 }
 
+// Completely right
 void bgv_enc(char *buffer, size_t len) {
 
-    /* Construct plaintext object */
+    // Construct plaintext object
     Plaintext pt;
     char *line = strtok(buffer, "\n");
     int i = 0;
@@ -64,7 +65,7 @@ void bgv_enc(char *buffer, size_t len) {
         i++;
     }
 
-    /* Encrypt plaintext */
+    // Encrypt plaintext
     int p = 941;
     int depth = 1;
     Public_Paramater pub = SetUp(p);
@@ -72,7 +73,7 @@ void bgv_enc(char *buffer, size_t len) {
     Public_Key pk = PubKeyGen(pub, sk);
     Ciphertext ct = Encrypt(pub, pk, pt, depth);
 
-    /* Convert ct into a buffer */
+    // Convert ct into a buffer
     char ct_buf[BUFSIZ];
     memset(ct_buf, '\0', BUFSIZ);
     std::string str;
@@ -103,7 +104,7 @@ void bgv_enc(char *buffer, size_t len) {
         }
     }
 
-    /* Convert sk into a buffer */
+    // Convert sk into a buffer
     char sk_buf[BUFSIZ];
     memset(sk_buf, '\0', BUFSIZ);
     std::string sk_str;
@@ -120,7 +121,7 @@ void bgv_enc(char *buffer, size_t len) {
         }
     }
 
-    /* Return buffer containing ciphertext and secret key*/
+    // Return buffer containing ciphertext and secret key
     strlcpy(ct_buf, str.c_str(), BUFSIZ);
     strlcpy(sk_buf, sk_str.c_str(), BUFSIZ);
     return_ciphertext(ct_buf, BUFSIZ, sk_buf, BUFSIZ);
@@ -128,12 +129,13 @@ void bgv_enc(char *buffer, size_t len) {
 
 void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
  
-    /* Constuct ciphertext object */
+    // Constuct ciphertext object - DONE
     Ciphertext ct;
     char *line = strtok(ciphertext, "\n");
     int i = 0;
     int j = 0;
     int ex = 0;
+    char *end;
     while (line) {
         if (*line == '!') {
             ex++;
@@ -143,17 +145,17 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
             continue;
         }
         if (ex == 0) {
-            ct.c0[i] = atoi(line);
+            ct.c0[i] = (uint64_t)strtoul(line, &end, 10);
             line = strtok(NULL, "\n");
             i++;
         }
         if (ex == 1) {
-            ct.c1[i] = atoi(line);
+            ct.c1[i] = (uint64_t)strtoul(line, &end, 10);
             line = strtok(NULL, "\n");
             i++;
         }
         if (ex == 2) {
-            ct.ctvec0[j].push_back(atoi(line));
+            ct.ctvec0[j].push_back((uint64_t)strtoul(line, &end, 10));
             line = strtok(NULL, "\n");
             i++;
             if (i == 4) {
@@ -162,7 +164,7 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
             }
         }
         if (ex == 3) {
-            ct.ctvec1[j].push_back(atoi(line));
+            ct.ctvec1[j].push_back((uint64_t)strtoul(line, &end, 10));
             line = strtok(NULL, "\n");
             i++;
             if (i == 4) {
@@ -172,13 +174,12 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
         }
     }
 
-    /* Construct Secret Key object */
+    // Construct Secret Key object - DONE
     Secret_Key sk;
     line = strtok(secretkey, "\n");
     i = 0;
     j = 0;
     ex = 0;
-    char *end;
     while (line) {
         if (*line == '!') {
             ex++;
@@ -202,20 +203,15 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
         }
     }
 
-    for (int i = 0; i < length_vector; i++) {
-        for (int j = 0; j < sk.skvec[i].size(); j++) {
-            printf("%lu\n", sk.skvec[i][j]);
-        }
-    }
-
-    /* Decrypt ciphertext */
+    printf("about to decrypt\n");
+    // Decrypt ciphertext 
     int p = 941;
     int depth = 1;
     Public_Paramater pub = SetUp(p);
     Plaintext pt = Decrypt(pub, sk, ct);
 
-    /* Convert pt to a buffer */
-    char pt_buf[BUFSIZ];
+    // Convert pt to a buffer 
+    /*char pt_buf[BUFSIZ];
     memset(pt_buf, '\0', BUFSIZ);
     std::string str;
     for (int i = 0; i < length_vector; i++) {
@@ -223,9 +219,9 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
         str += "\n";
     }
 
-    /* Return buffer containing plaintext */
+    // Return buffer containing plaintext
     strlcpy(pt_buf, str.c_str(), BUFSIZ);
-    return_plaintext(pt_buf, len);
+    return_plaintext(pt_buf, BUFSIZ);*/
 }
 
 
