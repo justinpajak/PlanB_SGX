@@ -67,7 +67,7 @@ void bgv_enc(char *buffer, size_t len) {
 
     // Encrypt plaintext
     int p = 941;
-    int depth = 1;
+    int depth = 0;
     Public_Paramater pub = SetUp(p);
     Secret_Key sk = SecKeyGen(pub);
     Public_Key pk = PubKeyGen(pub, sk);
@@ -206,12 +206,13 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
     printf("about to decrypt\n");
     // Decrypt ciphertext 
     int p = 941;
-    int depth = 1;
+    int depth = 0;
     Public_Paramater pub = SetUp(p);
+    ct.depth = (int64_t)depth;
     Plaintext pt = Decrypt(pub, sk, ct);
 
     // Convert pt to a buffer 
-    /*char pt_buf[BUFSIZ];
+    char pt_buf[BUFSIZ];
     memset(pt_buf, '\0', BUFSIZ);
     std::string str;
     for (int i = 0; i < length_vector; i++) {
@@ -221,7 +222,7 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
 
     // Return buffer containing plaintext
     strlcpy(pt_buf, str.c_str(), BUFSIZ);
-    return_plaintext(pt_buf, BUFSIZ);*/
+    return_plaintext(pt_buf, BUFSIZ);
 }
 
 
@@ -419,11 +420,10 @@ Plaintext Decrypt(Public_Paramater pubpara, Secret_Key sk, Ciphertext ct)
         message.m[i] = ct.c0[i] - sk.s[i] * ct.c1[i]; 
         message.m[i] = mod(message.m[i], pubpara.q[ct.depth]); 
         message.m[i] = mod(message.m[i], pubpara.p[0]);
-        for(int j = 0; j<L; j++)
+        /*for(int j = 0; j<L; j++)
         {
-            message.mvec[i].push_back(mod(mod(ct.ctvec0[i].at(j) - sk.skvec[i].at(j) * ct.ctvec1[i].at(j), 
-                pubpara.q[L-1]),pubpara.p[j])); 
-        } 
+            message.mvec[i].push_back(mod(mod(ct.ctvec0[i].at(j) - sk.skvec[i].at(j) * ct.ctvec1[i].at(j), pubpara.q[L-1]),pubpara.p[j])); 
+        }*/
     }
     return message; 
 }
