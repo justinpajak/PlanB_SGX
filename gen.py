@@ -4,7 +4,7 @@ import sys, os, random
 
 def main():
 
-	n = 12
+	n = 4096
 	arguments = sys.argv[1:]
 	while arguments and arguments[0].startswith("-"):
 		arg = arguments.pop(0)
@@ -16,7 +16,7 @@ def main():
 	pt = open("plaintext.txt", "w")
 	random.seed()
 	for _ in range(n):
-		pt.write(str(random.randint(10, 500)))
+		pt.write(str(random.randint(1000, 10000)))
 		pt.write("\n")
 	pt.close()
 

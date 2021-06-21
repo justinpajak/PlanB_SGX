@@ -8,10 +8,4 @@ palbgv: palbgv.cpp
 	$(CXX) $(PALISADE_INCLUDES) -o $@ $< $(PALISADE_STATIC_LIBS)
 
 clean:
-	rm -f bin/inverse
-	rm -f bin/specialMult
-	rm -f bin/makeData
-	rm -f bin/secondMult
-	rm -rf bin/container
-	rm -rf bin/ctexts
-	rm -rf bin/result
+	rm palbgv

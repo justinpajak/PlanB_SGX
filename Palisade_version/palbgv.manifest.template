@@ -24,6 +24,8 @@ fs.mount.tmp.path = "/tmp"
 fs.mount.tmp.uri = "file:/tmp"
 
 sgx.trusted_files.palbgv = "file:./palbgv"
+sgx.allowed_files.plaintext = "file:plaintext.txt"
+sgx.allowed_files.decrypted = "file:decrypted.txt"
 
 sgx.enclave_size = "1G"
 sgx.nonpie_binary = 1
