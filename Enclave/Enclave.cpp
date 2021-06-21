@@ -208,10 +208,8 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
     }
 
  	// Decrypt ciphertext 
-    int p = 941;
-    int depth = 0;
+    int p = 941; 
     Public_Paramater pub = SetUp(p);
-    ct.depth = (int64_t)depth;
     Plaintext pt = Decrypt(pub, sk, ct);
 
     // Convert pt to a buffer 
@@ -224,6 +222,7 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
     }
 
     // Return buffer containing plaintext
+	printf("running decrypt");
     strlcpy(pt_buf, str.c_str(), BUFSIZ);
     return_plaintext(pt_buf, BUFSIZ);
 }

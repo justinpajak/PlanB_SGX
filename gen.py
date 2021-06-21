@@ -14,7 +14,7 @@ def main():
 
 	# Write to plaintext.txt 
 	pt = open("plaintext.txt", "w")
-	random.seed(1)
+	random.seed()
 	for _ in range(n):
 		pt.write(str(random.randint(10, 500)))
 		pt.write("\n")

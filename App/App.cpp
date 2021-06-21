@@ -230,15 +230,6 @@ void ocall_print_string(const char *str)
     printf("%s", str);
 }
 
-typedef struct
-{
-    int64_t c0[4]; 
-    int64_t c1[4]; 
-    std::vector<int64_t> ctvec0[4]; 
-    std::vector<int64_t> ctvec1[4]; 
-    int64_t depth; 
-} Ciphertext;
-
 void return_ciphertext(char *ciphertext, size_t len, char *secretkey, size_t len1) {
 
     /* Write ciphertext to file */

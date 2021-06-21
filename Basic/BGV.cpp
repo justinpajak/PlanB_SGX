@@ -20,7 +20,7 @@ int main (){
 	message.m[2] = 974; 
 	message.m[3] = 738;*/
 
-	FILE *f = fopen("plaintext.txt", "r+");
+	FILE *f = fopen("../plaintext.txt", "r+");
 	char buffer[BUFSIZ];
 	int i = 0;
 	while (fgets(buffer, BUFSIZ, f)) {
@@ -40,7 +40,7 @@ int main (){
 	for (int i = 0; i < length_vector; i++) {
 		std::cout << message.m[i] << std::endl;
 	}
-	std::cout << std::endl;
+	std::cout << "----------------------------------------------------------" << std::endl;
 	for (int i = 0; i < length_vector; i++) {
 		std::cout << aftercrypt.m[i] << std::endl;
 	}
