@@ -10,12 +10,26 @@ int main (){
 	Public_Paramater pubpara = SetUp(p); 
 	Secret_Key sk = SecKeyGen(pubpara); 
 	Public_Key pk = PubKeyGen(pubpara, sk); 
-	Plaintext message; 
-	message.m[0] = 2064; 
+
+
+
+	Plaintext message;
+
+	/*message.m[0] = 2064; 
 	message.m[1] = 97; 
 	message.m[2] = 974; 
-	message.m[3] = 738; 
-	int depth = 1; 
+	message.m[3] = 738;*/
+
+	FILE *f = fopen("plaintext.txt", "r+");
+	char buffer[BUFSIZ];
+	int i = 0;
+	while (fgets(buffer, BUFSIZ, f)) {
+		message.m[i] = atoi(buffer);
+		i++;
+	}
+
+
+	int depth = 0; 
 	Ciphertext ct = Encrypt(pubpara, pk, message, depth); 
 	Plaintext aftercrypt; 
 	aftercrypt = Decrypt(pubpara, sk, ct);
