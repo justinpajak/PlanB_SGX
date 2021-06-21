@@ -288,27 +288,25 @@ int SGX_CDECL main(int argc, char *argv[])
     }
     
     /* Parse command line arguments */
-    if (argc > 2 || argc < 2 || strlen(argv[1]) > 2 || argv[1][0] != '-') {
-        usage(1);
-    }
-    int choice = -1;
-    switch(argv[1][1]) {
-        case 'h':
-            usage(0);
-            break;
-
-        case 'e':
-            // Run encryption algorithm
-            choice = 1;
-            break;
-
-        case 'd':
-            // Run decryption algorithm
-            choice = 0;
-            break;
-
-        default:
-            usage(1);
+    int choice;
+    int n; // Number of values -- still haven't implemented this yet, this will change the value of length_vector
+    for (int i = 1; i < argc; i++) {
+        if (argv[i][0] == '-') {
+            switch(argv[i][1]) {
+                case 'e':
+                    choice = 1;
+                    break;
+                case 'd':
+                    choice = 0;
+                    break;
+                case 'n':
+                    n = atoi(argv[++i]);
+                default:
+                    exit(EXIT_FAILURE);
+            }
+        } else {
+            exit(EXIT_FAILURE);
+        }
     }
 
     // Run BGV encryption

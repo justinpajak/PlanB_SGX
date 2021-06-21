@@ -67,7 +67,7 @@ void bgv_enc(char *buffer, size_t len) {
 
     // Encrypt plaintext
     int p = 941;
-    int depth = 0;
+    int depth = 1;
     Public_Paramater pub = SetUp(p);
     Secret_Key sk = SecKeyGen(pub);
     Public_Key pk = PubKeyGen(pub, sk);
@@ -206,7 +206,7 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
     printf("about to decrypt\n");
     // Decrypt ciphertext 
     int p = 941;
-    int depth = 0;
+    int depth = 1;
     Public_Paramater pub = SetUp(p);
     ct.depth = (int64_t)depth;
     Plaintext pt = Decrypt(pub, sk, ct);
