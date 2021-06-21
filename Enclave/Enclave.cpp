@@ -67,7 +67,7 @@ void bgv_enc(char *buffer, size_t len) {
 
     // Encrypt plaintext
     int p = 941;
-    int depth = 1;
+    int depth = 0;
     Public_Paramater pub = SetUp(p);
     Secret_Key sk = SecKeyGen(pub);
     Public_Key pk = PubKeyGen(pub, sk);
@@ -81,28 +81,28 @@ void bgv_enc(char *buffer, size_t len) {
         str += std::to_string(ct.c0[i]);
         str += "\n";
     }
-    str += "!";
-    str += "\n";
+    str += "!\n";
     for (int i = 0; i < length_vector; i++) {
         str += std::to_string(ct.c1[i]);
         str += "\n";
     }
-    str += "!";
-    str += "\n";
+    str += "!\n";
     for (int i = 0; i < length_vector; i++) {
         for (int j = 0; j < ct.ctvec0[i].size(); j++) {
             str += std::to_string(ct.ctvec0[i][j]);
             str += "\n";
         }
     }
-    str += "!";
-    str += "\n";
+    str += "!\n";
     for (int i = 0; i < length_vector; i++) {
         for (int j = 0; j < ct.ctvec1[i].size(); j++) {
             str += std::to_string(ct.ctvec1[i][j]);
             str += "\n";
         }
     }
+	str += "!\n";
+	str += std::to_string(ct.depth);
+	str += "\n";
 
     // Convert sk into a buffer
     char sk_buf[BUFSIZ];
@@ -172,6 +172,10 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
                 i = 0;
             }
         }
+		if (ex == 4) {
+			ct.depth = (uint64_t)strtoul(line, &end, 10);
+			line = strtok(NULL, "\n");
+		}
     }
 
     // Construct Secret Key object - DONE
@@ -203,10 +207,9 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
         }
     }
 
-    printf("about to decrypt\n");
-    // Decrypt ciphertext 
+ 	// Decrypt ciphertext 
     int p = 941;
-    int depth = 1;
+    int depth = 0;
     Public_Paramater pub = SetUp(p);
     ct.depth = (int64_t)depth;
     Plaintext pt = Decrypt(pub, sk, ct);
