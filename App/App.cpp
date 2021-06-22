@@ -309,11 +309,12 @@ int SGX_CDECL main(int argc, char *argv[])
             fprintf(stderr, "Error opening plaintext.txt\n");
             return EXIT_FAILURE;
         }
-        char buffer[BUFSIZ];
-        while (fread(buffer, 1, BUFSIZ, f_plaintext) > 0);
+        int len = BUFSIZ * 4;
+        char buffer[len];
+        while (fread(buffer, 1, len, f_plaintext) > 0);
 
         /* Make Encryption ECALL */
-        bgv_enc(global_eid, buffer, BUFSIZ);
+        bgv_enc(global_eid, buffer, len);
         fclose(f_plaintext);
     } 
 
@@ -326,8 +327,9 @@ int SGX_CDECL main(int argc, char *argv[])
             fprintf(stderr, "Error opening ciphertext.txt\n");
             return EXIT_FAILURE;
         }
-        char ct_buffer[BUFSIZ];
-        while (fread(ct_buffer, 1, BUFSIZ, f_ciphertext) > 0);
+        int len = BUFSIZ * 4;
+        char ct_buffer[len];
+        while (fread(ct_buffer, 1, len, f_ciphertext) > 0);
         fclose(f_ciphertext);
 
         /* Read in secret key from secretkey.txt */
@@ -336,12 +338,12 @@ int SGX_CDECL main(int argc, char *argv[])
             fprintf(stderr, "Error opening secretkey.txt\n");
             return EXIT_FAILURE;
         }
-        char sk_buffer[BUFSIZ];
-        while (fread(sk_buffer, 1, BUFSIZ, f_secretkey) > 0);
+        char sk_buffer[len];
+        while (fread(sk_buffer, 1, len, f_secretkey) > 0);
         fclose(f_secretkey);
 
         /* Make Decryption ECALL */
-        bgv_dec(global_eid, ct_buffer, BUFSIZ, sk_buffer, BUFSIZ);
+        bgv_dec(global_eid, ct_buffer, len, sk_buffer, len);
     }
 
     /* Destroy the enclave */

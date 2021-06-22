@@ -39,6 +39,7 @@ enclave {
      *  [*]: implies to import all functions.
      */
     
+	/* user check */
     trusted {
         public void bgv_enc([in, size=len] char *buffer, size_t len);
         public void bgv_dec([in, size=len] char *ciphertext, size_t len, [in, size=len1] char *secretkey, size_t len1);

@@ -74,8 +74,8 @@ void bgv_enc(char *buffer, size_t len) {
     Ciphertext ct = Encrypt(pub, pk, pt, depth);
 
     // Convert ct into a buffer
-    char ct_buf[BUFSIZ];
-    memset(ct_buf, '\0', BUFSIZ);
+    char ct_buf[len];
+    memset(ct_buf, '\0', len);
     std::string str;
     for (int i = 0; i < length_vector; i++) {
         str += std::to_string(ct.c0[i]);
@@ -105,8 +105,8 @@ void bgv_enc(char *buffer, size_t len) {
 	str += "\n";
 
     // Convert sk into a buffer
-    char sk_buf[BUFSIZ];
-    memset(sk_buf, '\0', BUFSIZ);
+    char sk_buf[len];
+    memset(sk_buf, '\0', len);
     std::string sk_str;
     for (int i = 0; i < length_vector; i++) {
         sk_str += std::to_string(sk.s[i]);
@@ -122,9 +122,9 @@ void bgv_enc(char *buffer, size_t len) {
     }
 
     // Return buffer containing ciphertext and secret key
-    strlcpy(ct_buf, str.c_str(), BUFSIZ);
-    strlcpy(sk_buf, sk_str.c_str(), BUFSIZ);
-    return_ciphertext(ct_buf, BUFSIZ, sk_buf, BUFSIZ);
+    strlcpy(ct_buf, str.c_str(), len);
+    strlcpy(sk_buf, sk_str.c_str(), len);
+    return_ciphertext(ct_buf, len, sk_buf, len);
 }
 
 void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
@@ -213,8 +213,8 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
     Plaintext pt = Decrypt(pub, sk, ct);
 
     // Convert pt to a buffer 
-    char pt_buf[BUFSIZ];
-    memset(pt_buf, '\0', BUFSIZ);
+    char pt_buf[len];
+    memset(pt_buf, '\0', len);
     std::string str;
     for (int i = 0; i < length_vector; i++) {
         str += std::to_string(pt.m[i]);
@@ -223,8 +223,8 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
 
     // Return buffer containing plaintext
 	printf("running decrypt");
-    strlcpy(pt_buf, str.c_str(), BUFSIZ);
-    return_plaintext(pt_buf, BUFSIZ);
+    strlcpy(pt_buf, str.c_str(), len);
+    return_plaintext(pt_buf, len);
 }
 
 

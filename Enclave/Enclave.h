@@ -39,7 +39,7 @@
 #include <iostream>
 #include <fstream>
 
-#define length_vector 1000 
+#define length_vector 1000
 #define L 2 //defining depth of the circui to be 3
 #define err 10 //defining the range of error to be 10
 #define pt_q 11 //defining the upper bound of noise 
