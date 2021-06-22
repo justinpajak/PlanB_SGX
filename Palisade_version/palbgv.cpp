@@ -9,7 +9,7 @@ using namespace lbcrypto;
 int main(int argc, char *argv[]) {
 
 	// Set main parameters
-	int plaintextModulus = 65537;
+	int64_t plaintextModulus = 536903681;
 	double sigma = 3.2;
 	SecurityLevel securityLevel = HEStd_128_classic;
 	uint32_t depth = 2;
@@ -35,17 +35,23 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 	char buffer[BUFSIZ];
+	char *end;
 	vector<int64_t> data;
 	while (fgets(buffer, BUFSIZ, f) > 0) {
-		data.push_back(atoi(buffer));
+		data.push_back((int64_t)strtoul(buffer, &end, 10));
+	}
+
+	FILE *d = fopen("decrypted.txt", "w+");
+	for (int i =0; i < data.size(); i++) {
+		fprintf(d, "%lu\n", data[i]);
 	}
 
 	// Encrypt data
 	Plaintext pt = cc->MakePackedPlaintext(data);
-	Ciphertext<DCRTPoly> ct = cc->Encrypt(keyPair.publicKey, pt);
+	//Ciphertext<DCRTPoly> ct = cc->Encrypt(keyPair.publicKey, pt);
 
 	// Decrypt data
-	Plaintext res;
+	/*Plaintext res;
 	cc->Decrypt(keyPair.secretKey, ct, &res);
 
 	// Send data to file 
@@ -58,5 +64,5 @@ int main(int argc, char *argv[]) {
 	for (int i = 0; i < pt->GetLength(); i++) {
 		fprintf(d, "%lu\n", res_vec[i]);
 	}
-	fclose(d);
+	fclose(d);*/
 }
