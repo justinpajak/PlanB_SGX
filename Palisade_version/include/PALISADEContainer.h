@@ -59,7 +59,7 @@ public:
   //TODO may have to redefine these macros, or remove altogether
   //See https://gitlab.com/palisade/palisade-development/-/blob/master/src/pke/examples/simple-integers-serial.cpp
   //This constructor is for BGV - see new one below for CKKS
-  /*PALISADEContainer(const unsigned int plain_in = PLAIN_DEFAULT, const unsigned int depth_in = DEPTH_DEFAULT, 
+  PALISADEContainer(const unsigned int plain_in = PLAIN_DEFAULT, const unsigned int depth_in = DEPTH_DEFAULT, 
                     const unsigned int slots_in = BATCHSIZE_DEFAULT) : _plain_modulus(plain_in), depth(depth_in) {
     //See https://gitlab.com/palisade/palisade-release/-/blob/master/src/pke/include/cryptocontext.h
     context = CryptoContextFactory<DCRTPoly>::genCryptoContextBGVrns(depth, _plain_modulus, SECURITY, SIGMA, depth, OPTIMIZED, BV);
@@ -80,11 +80,11 @@ public:
 
     context->EvalMultKeysGen(sk);
     this->_has_secret_key = true;
-  } */
+  }
 
   //CKKS constructor - quick+dirty impl., not parameterized
   //Default for m should be 8192
-  PALISADEContainer(unsigned int m, unsigned int depth_in, unsigned int p){
+  /*PALISADEContainer(unsigned int m, unsigned int depth_in, unsigned int p){
     static const int dcrtBits = 40;
     depth = depth_in;
     _plain_modulus = 0;
@@ -92,10 +92,10 @@ public:
 
     context =
       CryptoContextFactory<DCRTPoly>::genCryptoContextCKKSWithParamsGen(
-          m, depth, /*numPrimes*/
-          dcrtBits, 10, /*relinWindow*/
-          batchSize,           /*batch size*/
-          OPTIMIZED, depth /*depth*/);
+          m, depth, //numPrimes
+          dcrtBits, 10, //relinWindow
+          batchSize,           //batch size
+          OPTIMIZED, depth); 	// depth
 
 
     context->Enable(ENCRYPTION);
@@ -133,7 +133,7 @@ public:
     //Hopefully this does not take up too much memory
     //May have to serialize these
     context->EvalAtIndexKeyGen(sk, indices);
-  } 
+  } */
 
   //This will fail if called on a nonexistent or empty file
   PALISADEContainer(const std::string & containername, const bool load_sk){
@@ -152,8 +152,8 @@ public:
     return sk;
   }
   
-  /*
-  int serialize(std::ostream & os, const bool save_sk){
+  
+  /*int serialize(std::ostream & os, const bool save_sk){
     //Context
     if(!Serial::Serialize(context, os, SERIAL_FORMAT)){
       return 1;
@@ -174,8 +174,8 @@ public:
       }
     }
     return 0;
-  }
-  */
+  }*/
+  
 
   int serialize(const std::string & ofname, const bool save_sk){
     //Context
