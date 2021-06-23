@@ -330,7 +330,7 @@ int SGX_CDECL main(int argc, char *argv[])
             fprintf(stderr, "Error opening ciphertext.txt\n");
             return EXIT_FAILURE;
         }
-        int len = n * sizeof(int64_t) * 4;
+        int len = n * sizeof(int64_t) * 6;
         char ct_buffer[len];
         while (fread(ct_buffer, 1, len, f_ciphertext) > 0);
         fclose(f_ciphertext);

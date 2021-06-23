@@ -121,7 +121,6 @@ void bgv_enc(char *buffer, size_t len) {
             sk_str += "\n";
         }
     }
-
     // Return buffer containing ciphertext and secret key
     strlcpy(ct_buf, str.c_str(), len);
     strlcpy(sk_buf, sk_str.c_str(), len);
@@ -132,7 +131,7 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
  
     // Constuct ciphertext object - DONE
 	printf("In decryption ECALL\n");
-    Ciphertext ct;
+    Ciphertext *ct = (Ciphertext*)malloc(sizeof(Ciphertext));
     char *line = strtok(ciphertext, "\n");
     int i = 0;
     int j = 0;
@@ -147,17 +146,17 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
             continue;
         }
         if (ex == 0) {
-            ct.c0[i] = (uint64_t)strtoul(line, &end, 10);
+            ct->c0[i] = (uint64_t)strtoul(line, &end, 10);
             line = strtok(NULL, "\n");
             i++;
         }
         if (ex == 1) {
-            ct.c1[i] = (uint64_t)strtoul(line, &end, 10);
+            ct->c1[i] = (uint64_t)strtoul(line, &end, 10);
             line = strtok(NULL, "\n");
             i++;
         }
         if (ex == 2) {
-            ct.ctvec0[j].push_back((uint64_t)strtoul(line, &end, 10));
+            ct->ctvec0[j].push_back((uint64_t)strtoul(line, &end, 10));
             line = strtok(NULL, "\n");
             i++;
             if (i == 4) {
@@ -166,7 +165,7 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
             }
         }
         if (ex == 3) {
-            ct.ctvec1[j].push_back((uint64_t)strtoul(line, &end, 10));
+            ct->ctvec1[j].push_back((uint64_t)strtoul(line, &end, 10));
             line = strtok(NULL, "\n");
             i++;
             if (i == 4) {
@@ -175,13 +174,13 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
             }
         }
 		if (ex == 4) {
-			ct.depth = (uint64_t)strtoul(line, &end, 10);
+			ct->depth = (uint64_t)strtoul(line, &end, 10);
 			line = strtok(NULL, "\n");
 		}
     }
 
     // Construct Secret Key object - DONE
-    Secret_Key sk;
+    Secret_Key *sk = (Secret_Key*)malloc(sizeof(Secret_Key));
     line = strtok(secretkey, "\n");
     i = 0;
     j = 0;
@@ -194,12 +193,12 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
             continue;
         }
         if (ex == 0) {
-            sk.s[i] = (uint64_t)strtoul(line, &end, 10);
+            sk->s[i] = (uint64_t)strtoul(line, &end, 10);
             line = strtok(NULL, "\n");
             i++;
         }
         if (ex == 1) {
-            sk.skvec[j].push_back((uint64_t)strtoul(line, &end, 10));
+            sk->skvec[j].push_back((uint64_t)strtoul(line, &end, 10));
             line = strtok(NULL, "\n");
             i++;
             if (i == 4) {
@@ -212,7 +211,9 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
  	// Decrypt ciphertext 
     int p = 65537; 
     Public_Paramater pub = SetUp(p);
-    Plaintext pt = Decrypt(pub, sk, ct);
+    Plaintext pt = Decrypt(pub, *sk, *ct);
+	free(ct);
+	free(sk);
 
     // Convert pt to a buffer 
     char pt_buf[len];
