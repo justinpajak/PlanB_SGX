@@ -232,6 +232,8 @@ void ocall_print_string(const char *str)
 
 void return_ciphertext(char *ciphertext, size_t len, char *secretkey, size_t len1) {
 
+	std::cout << "in OCALL\n" << std::endl;
+
     /* Write ciphertext to file */
     FILE *f_ciphertext = fopen("ciphertext.txt", "w+");
     if (!f_ciphertext) {
@@ -250,6 +252,9 @@ void return_ciphertext(char *ciphertext, size_t len, char *secretkey, size_t len
 }
 
 void return_plaintext(char *plaintext, size_t len) {
+
+	std::cout << "in OCALL\n" << std::endl;
+
     /* Write plaintext to file */
     FILE *f_decrypted = fopen("decrypted.txt", "w+");
     if (!f_decrypted) {
@@ -280,7 +285,7 @@ int SGX_CDECL main(int argc, char *argv[])
     
     /* Parse command line arguments */
     int choice;
-    int n; // Number of values -- still haven't implemented this yet, this will change the value of length_vector
+    int n = 4096; // Number of values -- still have to change Enclave.h (length_vector) to run right 
     for (int i = 1; i < argc; i++) {
         if (argv[i][0] == '-') {
             switch(argv[i][1]) {
@@ -290,8 +295,6 @@ int SGX_CDECL main(int argc, char *argv[])
                 case 'd':
                     choice = 0;
                     break;
-                case 'n':
-                    n = atoi(argv[++i]);
                 default:
                     exit(EXIT_FAILURE);
             }
@@ -303,17 +306,17 @@ int SGX_CDECL main(int argc, char *argv[])
     // Run BGV encryption
     if (choice) {
 
-        /* Read in plaintext from plaintext.txt */
+        // Read in plaintext from plaintext.txt
         FILE *f_plaintext = fopen("plaintext.txt", "r");
         if (!f_plaintext) {
             fprintf(stderr, "Error opening plaintext.txt\n");
             return EXIT_FAILURE;
         }
-        int len = BUFSIZ * 4;
+        int len = n * sizeof(int64_t) * 4;
         char buffer[len];
         while (fread(buffer, 1, len, f_plaintext) > 0);
 
-        /* Make Encryption ECALL */
+        // Make Encryption ECALL
         bgv_enc(global_eid, buffer, len);
         fclose(f_plaintext);
     } 
@@ -321,18 +324,18 @@ int SGX_CDECL main(int argc, char *argv[])
     // Run BGV decryption
     else {
 
-        /* Read in ciphertext from ciphertext.txt */
+        // Read in ciphertext from ciphertext.txt
         FILE *f_ciphertext = fopen("ciphertext.txt", "r");
         if (!f_ciphertext) {
             fprintf(stderr, "Error opening ciphertext.txt\n");
             return EXIT_FAILURE;
         }
-        int len = BUFSIZ * 4;
+        int len = n * sizeof(int64_t) * 4;
         char ct_buffer[len];
         while (fread(ct_buffer, 1, len, f_ciphertext) > 0);
         fclose(f_ciphertext);
 
-        /* Read in secret key from secretkey.txt */
+        // Read in secret key from secretkey.txt
         FILE *f_secretkey = fopen("secretkey.txt", "r");
         if (!f_secretkey) {
             fprintf(stderr, "Error opening secretkey.txt\n");
@@ -342,7 +345,7 @@ int SGX_CDECL main(int argc, char *argv[])
         while (fread(sk_buffer, 1, len, f_secretkey) > 0);
         fclose(f_secretkey);
 
-        /* Make Decryption ECALL */
+        // Make Decryption ECALL
         bgv_dec(global_eid, ct_buffer, len, sk_buffer, len);
     }
 

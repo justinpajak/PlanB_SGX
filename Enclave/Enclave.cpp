@@ -56,6 +56,7 @@ void printf(const char *fmt, ...)
 void bgv_enc(char *buffer, size_t len) {
 
     // Construct plaintext object
+	printf("in encryption ECALL\n");
     Plaintext pt;
     char *line = strtok(buffer, "\n");
     int i = 0;
@@ -66,7 +67,7 @@ void bgv_enc(char *buffer, size_t len) {
     }
 
     // Encrypt plaintext
-    int p = 941;
+    int p = 65537;
     int depth = 0;
     Public_Paramater pub = SetUp(p);
     Secret_Key sk = SecKeyGen(pub);
@@ -130,6 +131,7 @@ void bgv_enc(char *buffer, size_t len) {
 void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
  
     // Constuct ciphertext object - DONE
+	printf("In decryption ECALL\n");
     Ciphertext ct;
     char *line = strtok(ciphertext, "\n");
     int i = 0;
@@ -208,7 +210,7 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
     }
 
  	// Decrypt ciphertext 
-    int p = 941; 
+    int p = 65537; 
     Public_Paramater pub = SetUp(p);
     Plaintext pt = Decrypt(pub, sk, ct);
 
@@ -222,7 +224,6 @@ void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
     }
 
     // Return buffer containing plaintext
-	printf("running decrypt");
     strlcpy(pt_buf, str.c_str(), len);
     return_plaintext(pt_buf, len);
 }

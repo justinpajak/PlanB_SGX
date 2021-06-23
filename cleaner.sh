@@ -1,4 +1,4 @@
 #!/bin/bash
-echo > ciphertext.txt
-echo > decrypted.txt
-echo > secretkey.txt
+> ciphertext.txt
+> decrypted.txt
+> secretkey.txt
