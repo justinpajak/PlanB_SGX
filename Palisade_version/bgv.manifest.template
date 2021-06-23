@@ -27,6 +27,11 @@ sgx.trusted_files.bgv = "file:./bgv"
 sgx.allowed_files.plaintext = "file:plaintext.txt"
 sgx.allowed_files.encrypted = "file:encrypted.txt"
 sgx.allowed_files.decrypted = "file:decrypted.txt"
+sgx.allowed_files.context = "file:container/context"
+sgx.allowed_files.emkey = "file:container/emkey"
+sgx.allowed_files.pubkey = "file:container/pubkey"
+sgx.allowed_files.rotkey = "file:container/rotkey"
+sgx.allowed_files.seckey = "file:container/seckey"
 
 sgx.enclave_size = "1G"
 sgx.nonpie_binary = 1

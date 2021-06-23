@@ -36,6 +36,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <chrono>
 
 # include <unistd.h>
 # include <pwd.h>
@@ -232,8 +233,6 @@ void ocall_print_string(const char *str)
 
 void return_ciphertext(char *ciphertext, size_t len, char *secretkey, size_t len1) {
 
-	std::cout << "in OCALL\n" << std::endl;
-
     /* Write ciphertext to file */
     FILE *f_ciphertext = fopen("ciphertext.txt", "w+");
     if (!f_ciphertext) {
@@ -252,8 +251,6 @@ void return_ciphertext(char *ciphertext, size_t len, char *secretkey, size_t len
 }
 
 void return_plaintext(char *plaintext, size_t len) {
-
-	std::cout << "in OCALL\n" << std::endl;
 
     /* Write plaintext to file */
     FILE *f_decrypted = fopen("decrypted.txt", "w+");
@@ -306,6 +303,7 @@ int SGX_CDECL main(int argc, char *argv[])
     // Run BGV encryption
     if (choice) {
 
+		auto start = std::chrono::high_resolution_clock::now();
         // Read in plaintext from plaintext.txt
         FILE *f_plaintext = fopen("plaintext.txt", "r");
         if (!f_plaintext) {
@@ -319,11 +317,16 @@ int SGX_CDECL main(int argc, char *argv[])
         // Make Encryption ECALL
         bgv_enc(global_eid, buffer, len);
         fclose(f_plaintext);
+		
+		auto stop = std::chrono::high_resolution_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+		std::cout << "Time: " << duration.count() / double(1000000) << " seconds." << std::endl;
     } 
 
     // Run BGV decryption
     else {
 
+		auto start = std::chrono::high_resolution_clock::now();
         // Read in ciphertext from ciphertext.txt
         FILE *f_ciphertext = fopen("ciphertext.txt", "r");
         if (!f_ciphertext) {
@@ -347,6 +350,10 @@ int SGX_CDECL main(int argc, char *argv[])
 
         // Make Decryption ECALL
         bgv_dec(global_eid, ct_buffer, len, sk_buffer, len);
+
+		auto stop = std::chrono::high_resolution_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+		std::cout << "Time: " << duration.count() / double(1000000) << " seconds." << std::endl;
     }
 
     /* Destroy the enclave */

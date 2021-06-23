@@ -56,7 +56,6 @@ void printf(const char *fmt, ...)
 void bgv_enc(char *buffer, size_t len) {
 
     // Construct plaintext object
-	printf("in encryption ECALL\n");
     Plaintext pt;
     char *line = strtok(buffer, "\n");
     int i = 0;
@@ -130,7 +129,6 @@ void bgv_enc(char *buffer, size_t len) {
 void bgv_dec(char *ciphertext, size_t len, char *secretkey, size_t len1) {
  
     // Constuct ciphertext object - DONE
-	printf("In decryption ECALL\n");
     Ciphertext *ct = (Ciphertext*)malloc(sizeof(Ciphertext));
     char *line = strtok(ciphertext, "\n");
     int i = 0;
