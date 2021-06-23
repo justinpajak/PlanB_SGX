@@ -1,2 +1,3 @@
-echo > plaintext.txt
-echo > decrypted.txt
+> plaintext.txt
+> encrypted.txt
+> decrypted.txt

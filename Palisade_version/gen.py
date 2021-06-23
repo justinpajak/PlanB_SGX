@@ -16,7 +16,7 @@ def main():
 	pt = open("plaintext.txt", "w")
 	random.seed()
 	for _ in range(n):
-		pt.write(str(random.randint(0, 2<<28)))
+		pt.write(str(random.randint(0, 60000)))
 		pt.write("\n")
 	pt.close()
 
