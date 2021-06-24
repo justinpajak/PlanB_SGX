@@ -9,4 +9,3 @@ bgv: bgv.cpp include/PALISADEContainer.h
 
 clean:
 	rm bgv
-	rm -rf container
