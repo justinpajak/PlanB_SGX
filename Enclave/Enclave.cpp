@@ -33,6 +33,7 @@
 #include <stdarg.h>
 #include <stdio.h>      /* vsnprintf */
 #include <string>
+#include <cmath>
 
 #include "Enclave.h"
 #include "Enclave_t.h"  /* print_string */
@@ -274,37 +275,45 @@ int64_t mod_inverse(int64_t a, int64_t n) //Find the modulo inverse of a
 
 int isprime(int64_t n)//check if n is a prime
 {
-    int64_t check = 1; 
-    for(int i = 2; i<n; i++)
-    {
-        if(n%i == 0)
-        {
-            check = 0; 
-            break; 
-        }
-    }
-    return check; 
+	int64_t check = 1;
+	// Only need to check up to sqrt(n) - if a number has nontrivial factors, then at least one of them must be smaller than sqrt(n)
+	int64_t n_root = ((int64_t)sqrt(n)) + 1;
+	for (int i = 2; i < n_root; i++) {
+		if (n % i == 0) {
+			check = 0;
+			break;
+		}
+	}
+	return check;
 }
 
 int64_t proper_prime(int64_t q, int64_t start)//Find a prime that works for our setup
 {
-    int64_t i, result = 0; 
-    for(i = start; ;i++)
-    {
-        if(isprime(i))
-        {
-            if((i-1)%q == 0)
-            {
-                result = i;
-                break; 
-            }
-        }
-    }
-    if(!result)
-    {
-        printf("error\n");
-    }
-    return result; 
+	int64_t result = 0;
+	// Start by forcing i to be 1 mod q
+	int64_t i = start;
+	int64_t remainder = start % q;
+	// q -remainder is the distance from i to the next multiple of q
+	// So, we can add that to i to get a multiple of q, and then add 1 to force i to be 1 mod q
+	if (remainder != 1) {
+		i += (q - remainder) + 1;
+	}
+	if ((i - 1) % q) {
+		printf("ERROR: initial construction of %d as 1 mod %d is incorrect\n", i, q);
+	}
+	// Then, increment i by q, so that it is always 1 mod q
+	// This should skip O(q - 1) primality checks
+	// Technically this is a dangerous infinite loop...
+	for (; ; i += q) {
+		if(isprime(i)) {
+			result = i;
+			break;
+		}
+	}
+	if (!result) {
+		printf("ERROR: failed to find proper prime after looping\n");
+	}
+	return result;
 }
 
 Public_Paramater SetUp(int64_t p)//Set up public parameter
