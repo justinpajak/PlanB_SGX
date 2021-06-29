@@ -1,5 +1,5 @@
 # PlanB_SGX
-Implemented BGV in two ways:<br/>
+BGVrns Encryption and Decryption Implemented in two ways:<br/>
 1. SGX using only SGX sdk
 2. SGX using PALISADE and Graphene
 
